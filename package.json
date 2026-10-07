@@ -1,0 +1,19 @@
+{
+  "name": "csv-colunas",
+  "version": "1.0.0",
+  "description": "Leitor de CSV tolerante: aspas, separador detectado (vírgula/ponto e vírgula/tab), BOM, cabeçalhos variáveis, busca de coluna por nome, diagnóstico por linha e limite de tamanho. Zero dependências.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": "./src/index.js",
+  "files": ["src", "README.md", "README.en-US.md", "README.es-AR.md", "LICENSE"],
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": ["csv", "parser", "bom", "separador", "planilha", "importacao", "pt-br"],
+  "author": "Rodrigo Rodrigues",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/techrodrigo21-ux/csv-colunas.git" },
+  "bugs": { "url": "https://github.com/techrodrigo21-ux/csv-colunas/issues" },
+  "homepage": "https://github.com/techrodrigo21-ux/csv-colunas#readme",
+  "engines": { "node": ">=18" }
+}
