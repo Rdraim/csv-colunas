@@ -9,7 +9,7 @@
 ![csv-colunas](assets/support/project-pt-br.svg)
 
 <!-- public-badges:start -->
-[![license](assets/support/badge-license.svg)](LICENSE) [![CI](assets/support/badge-ci.svg)](https://github.com/Rdraim/csv-colunas/actions) [![release](assets/support/badge-release.svg)](https://github.com/Rdraim/csv-colunas/releases)
+[![license](assets/support/badge-license.svg)](LICENSE) [![CI](assets/support/badge-ci.svg)](https://github.com/Rdraim/csv-colunas/actions) [![release](assets/support/badge-release.svg)](https://github.com/Rdraim/csv-colunas/releases) [![Git](assets/support/badge-git.svg)](https://github.com/Rdraim/csv-colunas/commits/main)
 <!-- public-badges:end -->
 
 <p>

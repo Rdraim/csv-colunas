@@ -7,6 +7,7 @@ export function visibleBadges(repo, release, runs) {
   const ci = runs?.workflow_runs?.[0];
   if(ci?.status === 'completed' && ci.conclusion === 'success') badges.push({key:'ci',label:'CI',value:'passing',color:'#438a16',href:`https://github.com/${repo.full_name}/actions`});
   if(typeof release?.tag_name === 'string' && release.tag_name.trim() && !release.draft && !release.prerelease) badges.push({key:'release',label:'release',value:release.tag_name,color:'#087ca7',href:`https://github.com/${repo.full_name}/releases`});
+  if(typeof repo.pushed_at === 'string' && Number.isFinite(Date.parse(repo.pushed_at))) badges.push({key:'git',label:'Git',value:new Date(repo.pushed_at).toISOString().slice(0,10),color:'#087ca7',href:`https://github.com/${repo.full_name}/commits/${encodeURIComponent(repo.default_branch || 'main')}`});
   for(const [key,count,route] of [['stars',repo.stargazers_count,'stargazers'],['forks',repo.forks_count,'forks']]) {
     if(Number.isSafeInteger(count) && count > 0) badges.push({key,label:key === 'stars' ? 'Stars' : 'Forks',value:String(count),color:'#087ca7',href:`https://github.com/${repo.full_name}/${route}`});
   }
