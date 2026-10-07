@@ -21,3 +21,14 @@ Optional packages belong in adapters, not mandatory core dependencies. Verify th
 | [papaparse](https://www.npmjs.com/package/papaparse/v/5.7.0) | 5.7.0 | — | MIT |
 
 Versions queried from the official npm registry; no declared engine does not guarantee compatibility. Optional adapters were not installed or validated against real services. The core is tested separately.
+
+## Conditional indicators
+
+README badges use local SVGs generated from the official GitHub API. Stars
+and Forks appear independently only above zero. Missing releases and pending
+or failed CI produce no badge; full results remain in Actions. badges.yml
+refreshes after CI, a release, star/fork and every six hours, or manually.
+An open page does not change instantly: reload after the automatic commit.
+GitHub may delay schedules or disable them after inactivity; check Actions.
+Transient API errors stop the update and preserve the last valid block.
+The temporary token publishes only README blocks and SVGs, never private data.
