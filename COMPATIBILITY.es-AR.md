@@ -21,3 +21,14 @@ Los paquetes opcionales pertenecen a adaptadores, no al núcleo obligatorio. Ver
 | [papaparse](https://www.npmjs.com/package/papaparse/v/5.7.0) | 5.7.0 | — | MIT |
 
 Versiones consultadas en el registro oficial npm; sin engines declarado no hay garantía de compatibilidad. Adaptadores opcionales no instalados ni validados con servicios reales. Núcleo probado por separado.
+
+## Indicadores condicionales
+
+Los badges usan SVG locales generados desde la API oficial de GitHub. Stars
+y Forks aparecen de forma independiente solo por encima de cero. Una release
+ausente o CI pendiente/fallido no genera badge; los resultados siguen en Actions.
+badges.yml actualiza tras CI, release, estrella/fork y cada seis horas, o a mano.
+La página abierta no cambia al instante: recargar tras el commit automático.
+GitHub puede demorar la agenda o desactivarla por inactividad; revisar Actions.
+Errores transitorios de API frenan la actualización y conservan el último bloque
+válido. El token temporal publica solo README y SVG, nunca datos privados.

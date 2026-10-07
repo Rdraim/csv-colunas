@@ -21,3 +21,15 @@ Pacotes opcionais são adaptadores, não dependências obrigatórias. Verifique 
 | [papaparse](https://www.npmjs.com/package/papaparse/v/5.7.0) | 5.7.0 | — | MIT |
 
 Versões consultadas no registro oficial npm; sem engines declarado não significa compatibilidade garantida. Adaptadores opcionais não foram instalados nem validados contra serviços reais. Núcleo testado separadamente.
+
+## Indicadores condicionais
+
+O README usa SVGs locais gerados a partir da API oficial do GitHub. Stars e
+Forks são independentes e só aparecem acima de zero. Release ausente ou CI
+pendente/falho não gera badge; os resultados completos permanecem em Actions.
+O workflow badges.yml atualiza após CI, release, estrela/fork e a cada seis
+horas, além da execução manual. Não há troca instantânea em uma página já
+aberta: recarregue após o commit automático. A agenda pode atrasar ou ser
+desativada pelo GitHub por inatividade; consulte Actions nesse caso. Falha
+transitória da API interrompe a atualização, preservando o último bloco válido.
+O token temporário só publica README e SVGs, nunca dados privados.
