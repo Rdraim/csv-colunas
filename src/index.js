@@ -37,6 +37,8 @@ export function dividirLinha(linha, sep) {
 /** Quebra o texto em linhas sem cortar quebras que estão dentro de aspas. */
 export function separarLinhas(texto) {
   const linhas = [];
+  let linhaFisica = 1, inicio = 1;
+  const origens = [];
   let atual = '';
   let dentroDeAspas = false;
   for (let i = 0; i < texto.length; i++) {
@@ -47,13 +49,17 @@ export function separarLinhas(texto) {
       atual += c;
     } else if ((c === '\n' || c === '\r') && !dentroDeAspas) {
       if (c === '\r' && texto[i + 1] === '\n') i++;
-      if (atual.trim()) linhas.push(atual);
+      if (atual.trim()) { linhas.push(atual); origens.push(inicio); }
+      linhaFisica++; inicio = linhaFisica;
       atual = '';
     } else {
+      if (c === '\n' || (c === '\r' && texto[i + 1] !== '\n')) linhaFisica++;
       atual += c;
     }
   }
-  if (atual.trim()) linhas.push(atual);
+  if (dentroDeAspas) throw new SyntaxError('Aspas não fechadas');
+  if (atual.trim()) {linhas.push(atual); origens.push(inicio);}
+  Object.defineProperty(linhas, 'origens', {value:origens});
   return linhas;
 }
 
@@ -69,9 +75,7 @@ export function normalizarChave(s) {
 export function detectarSeparador(primeira) {
   const conta = (c) => dividirLinha(primeira, c).length;
   const porVirgula = conta(',');
-  if (conta(';') > porVirgula) return ';';
-  if (conta('\t') > porVirgula) return '\t';
-  return ',';
+  return [',', ';', '\t'].sort((a,b)=>conta(b)-conta(a))[0];
 }
 
 /**
@@ -85,7 +89,9 @@ export function detectarSeparador(primeira) {
 export function lerCSV(texto, opcoes = {}) {
   const bruto = String(texto || '');
   const limite = opcoes.limiteBytes ?? LIMITE_PADRAO;
-  const bytes = Buffer.byteLength ? Buffer.byteLength(bruto, 'utf8') : bruto.length;
+  if (!Number.isSafeInteger(limite) || limite < 0) throw new RangeError('Limite deve ser inteiro não negativo');
+  if (opcoes.separador !== undefined && ![',',';','\t'].includes(opcoes.separador)) throw new TypeError('Separador inválido');
+  const bytes = new TextEncoder().encode(bruto).byteLength;
   if (bytes > limite) {
     throw new RangeError(`CSV excede o limite: ${bytes} bytes > ${limite} bytes`);
   }
@@ -97,13 +103,14 @@ export function lerCSV(texto, opcoes = {}) {
   const sep = opcoes.separador || detectarSeparador(linhas[0]);
   const cabecalho = dividirLinha(linhas[0], sep);
   const chaves = cabecalho.map(normalizarChave);
+  if (new Set(chaves.filter(Boolean)).size !== chaves.filter(Boolean).length) throw new SyntaxError('Cabeçalhos normalizados duplicados');
 
   const registros = [];
   const erros = [];
   for (let i = 1; i < linhas.length; i++) {
     const valores = dividirLinha(linhas[i], sep);
     if (valores.every((v) => !v)) continue;
-    const nLinha = i + 1;
+    const nLinha = linhas.origens[i];
     if (valores.length !== cabecalho.length) {
       erros.push({ linha: nLinha, esperado: cabecalho.length, encontrado: valores.length });
     }
@@ -122,6 +129,7 @@ export function registrosDeMatriz(matriz) {
   if (!linhas.length) return { cabecalho: [], chaves: [], registros: [] };
   const cabecalho = (linhas[0] || []).map((c) => String(c ?? '').trim());
   const chaves = cabecalho.map(normalizarChave);
+  if (new Set(chaves.filter(Boolean)).size !== chaves.filter(Boolean).length) throw new SyntaxError('Cabeçalhos normalizados duplicados');
   const registros = [];
   for (let i = 1; i < linhas.length; i++) {
     const valores = linhas[i] || [];
@@ -138,10 +146,12 @@ export function registrosDeMatriz(matriz) {
 export function col(registro, ...nomes) {
   for (const n of nomes) {
     const k = normalizarChave(n);
+    if (!k) continue;
     if (registro[k] != null && registro[k] !== '') return registro[k];
   }
   for (const n of nomes) {
     const k = normalizarChave(n);
+    if (!k) continue;
     const achou = Object.keys(registro).find((x) => x !== '__linha' && (x === k || x.includes(k)));
     if (achou && registro[achou]) return registro[achou];
   }

@@ -1,0 +1,4 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {lerCSV,col,detectarSeparador} from '../src/index.js';
+test('UTF8 sem Buffer e limites validados',()=>{const b=globalThis.Buffer;try{globalThis.Buffer=undefined;assert.equal(lerCSV('nome\ná').registros[0].nome,'á');assert.throws(()=>lerCSV('nome\ná',{limiteBytes:6}),RangeError);}finally{globalThis.Buffer=b;}assert.throws(()=>lerCSV('a',{limiteBytes:NaN}),RangeError);});
+test('aspas abertas e cabeçalho ambíguo rejeitados',()=>{assert.throws(()=>lerCSV('a\n"b'),SyntaxError);assert.throws(()=>lerCSV('Nome;Nóme\na;b'),SyntaxError);assert.equal(col({nome:'a'},''),'');});
+test('separador máximo e linha física preservada',()=>{assert.equal(detectarSeparador('a;b\tc\td'),'\t');const r=lerCSV('a,b\n"um\ndois",2\n\nx,3');assert.deepEqual(r.registros.map(x=>x.__linha),[2,5]);});
